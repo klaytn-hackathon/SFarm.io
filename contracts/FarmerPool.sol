@@ -1,8 +1,8 @@
 pragma solidity 0.4.24;
 
-import "./ACLContract.sol";
+import "./AccessControl.sol";
 
-contract DataContract is ACLContract {
+contract FarmerPool is AccessControl {
     struct Farmer{
         uint id;
         string name;
