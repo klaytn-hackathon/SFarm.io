@@ -18,17 +18,15 @@ contract FarmerPool is AccessControl {
     mapping (uint => Farmer) farmers;
     uint public count = 0;
  
-    function createFarmer(uint id, string name, uint dateOfBirth, uint social){
-        if (isUser(msg.sender, "createFarmer")) {
-            farmers[count] = Farmer(id, name, dateOfBirth, social, pending);
-            count++;
-        } else {
-            throw;
-        }
+    function createFarmer(uint id, string name, uint dateOfBirth, uint social) public {
+        require (isUser(msg.sender, "createFarmer"), "access prohibited");
+        
+        farmers[count] = Farmer(id, name, dateOfBirth, social, pending);
+        count++;
     }
 
     function getFarmer(uint index)
-        constant returns (uint id, string name, uint dateOfBirth, uint social, uint status) {
+        constant public returns (uint id, string name, uint dateOfBirth, uint social, uint status) {
             id = farmers[index].id;
             name = farmers[index].name;
             dateOfBirth = farmers[index].dateOfBirth;
@@ -37,7 +35,7 @@ contract FarmerPool is AccessControl {
     }
 
     function getFarmerById(uint id)
-        constant returns (uint idRet, string name, uint dateOfBirth, uint social, uint status) {
+        constant public returns (uint idRet, string name, uint dateOfBirth, uint social, uint status) {
 
         for (uint8 i=0; i < count; i++) {
             if (farmers[i].id == id) {
@@ -51,26 +49,18 @@ contract FarmerPool is AccessControl {
         }
     }
 
-    function updateFarmer(uint index, string name) {
-        if (isUser(msg.sender, "updateFarmer")) {
-            if (index > count) {
-                throw;
-            }
-            farmers[index].name = name;
-        } else {
-            throw;
-        }
+    function updateFarmer(uint index, string name) public {
+        require (isUser(msg.sender, "updateFarmer"), "access prohibited");
+        require (index < count, "out of index");
+
+        farmers[index].name = name;
     }
 
-    function updateFarmerStatus(uint index, uint status) {
-        if (isUser(msg.sender, "updateCustomer")) {
-            if (index > count) {
-                throw;
-            }
-            farmers[index].status = status;
-        } else {
-            throw;
-        }
+    function updateFarmerStatus(uint index, uint status) public {
+        require (isUser(msg.sender, "updateCustomer"), "access prohibited");
+        require (index < count, "out of index");
+
+        farmers[index].status = status;
     }
    
 }

@@ -6,42 +6,40 @@ contract AccessControl {
 
     event LogAccess(address indexed by, uint indexed accessTime, string method, string desc);
 
-    constructor() {
+    constructor() public {
         owner = msg.sender;
         users.push(owner);
     }
 
-    function isUser(address candidate, string method) returns (bool){
+    function isUser(address candidate, string method) public returns (bool){
         for(uint8 i = 0; i < users.length; i++){
             if (users[i] == candidate){
-                LogAccess(candidate, now, method, "successful access");
+                emit LogAccess(candidate, now, method, "successful access");
 
                 return true;
             }
         }
 
-        LogAccess(candidate, now,method,  "failed access");
+        emit LogAccess(candidate, now, method,  "failed access");
 
         return false;
     }
 
-    function addUser(address user){
-        if (msg.sender != owner) throw;
-
-        users.push(user);
-    }
-
-    function getUser(uint i) constant returns (address){
+    function getUser(uint i) constant public returns (address){
         return users[i];
     }
 
-    function getUserCount() constant returns (uint){
+    function getUserCount() constant public returns (uint){
         return users.length;
     }
 
-    function deleteIthUser(uint i){
-        if (msg.sender != owner) throw;
+    function addUser(address user) public {
+        require(msg.sender == owner);
+        users.push(user);
+    }
 
+    function deleteUser(uint i) public {
+        require(msg.sender == owner);
         delete users[i];
     }   
 }
