@@ -26,6 +26,8 @@ contract AccessControl {
     }
 
     function getUser(uint i) constant public returns (address){
+		require (i < users.length, "out of index");
+		
         return users[i];
     }
 
@@ -40,6 +42,7 @@ contract AccessControl {
 
     function deleteUser(uint i) public {
         require(msg.sender == owner);
+		require (i < users.length, "out of index");
         delete users[i];
     }   
 }
