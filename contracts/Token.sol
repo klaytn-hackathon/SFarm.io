@@ -94,5 +94,5 @@ contract Token is ERC20Interface {
 
     mapping (address => uint256) balances;
     mapping (address => mapping (address => uint256)) allowed;
-    uint256 public _totalSupply;
+    uint256 _totalSupply;
 }
